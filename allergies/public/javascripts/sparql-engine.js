@@ -1,9 +1,9 @@
-sparql = require 'sparql'
-fs = require('fs');
+var sparql = require('sparql');
+var fs = require('fs');
 var rdfstore = require('rdfstore');
 
-dbpedia = new sparql.Client 'http://dbpedia.org/sparql'
-foodExt = new sparql.Client ''//TODO: add external data set
+dbpedia = new sparql.Client('http://dbpedia.org/sparql')
+//foodExt = new sparql.Client() TODO: add external data set
 
 var localStore = new rdfstore.Store({persistent:true, 
                 engine:'mongodb', 
@@ -12,8 +12,7 @@ var localStore = new rdfstore.Store({persistent:true,
                 mongoDomain:'localhost', // location of the MongoDB instance, localhost by default
                 mongoPort:27017 // port where the MongoDB server is running, 27017 by default
                }, function(store){
- <http://example.org/people>', function() {
-  var rdf1 = fs.readFileSync('C:/Users/arnau/Downloads/Food Ontology.owl').toString();
+var rdf1 = fs.readFileSync('C:/Users/arnau/Downloads/Food Ontology.owl').toString();
 
 store.load("text/turtle", rdf1, function(s, d) {
 

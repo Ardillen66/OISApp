@@ -1,0 +1,69 @@
+<!-- views/home.handlebars -->
+
+<!-- ======================================== HOME VIEW HTML ======================================== -->
+
+<div id="Home" class="container-fluid">
+  {{#if user}}
+  <h1 align="center" style="font-size:70px">Welcome, {{user.username}}</h1>
+  {{else}}
+  <h1 align="center" style="font-size:70px">Welcome</h1><br>
+  {{/if}}
+</div>
+
+<div id="Recipes" class="container-fluid">
+  <h1 id="headerMap" align="center" style="font-size:70px">Recipes</h1>
+</div>
+
+{{#if user}}
+<div id="Profile" class="container-fluid">
+  <h1 align="center" style="font-size:70px;">Profile</h1>
+  <div id="profileBox" style="border-style:solid; border-color:#444;border-radius: 25px; 
+    padding: 20px; margin-left:25%; margin-right:25%; margin-top:1%;">
+    <img id="profilePic" src="http://isigned.org/images/anonymous.png" align="right"></img>
+    <b>Username: <b><b style="color:#5882FA;" id="PBusername"></b><br>
+    <b>First name: <b><b style="color:#5882FA;" id="PBfname"></b><br>
+    <b>Last name: <b><b style="color:#5882FA;" id="PBlname"></b><br><br>
+    <b>Birthday: <b><b style="color:#5882FA;" id="PBbd"></b><br>
+    <b>Sex: <b><b style="color:#5882FA;" id="PBsex"></b><br>
+    <b>Country: <b><b style="color:#5882FA;" id="PBcountry"></b><br><br>
+    <b>E-mail: <b><a href id="PBemail"></a><br>
+    <b>Facebook: <b><a href="#" id="PBfb"></a><br>
+    <a  href="#" data-toggle="modal" data-target="#editAccModal" id="edit">Edit</button>
+  </div>
+</div>
+
+<!-- =========================== JavaScript to load and display profile ============================= -->
+
+<script>
+$.getJSON("http://127.0.0.1:3000/getProfileInfo?uid={{user.id}}", {
+    dataType: 'JSONP'
+  }, function(data){
+    operateProfile(data);//using data
+  }
+);
+
+function operateProfile(data) {
+  document.getElementById("PBusername").innerHTML = data.username;
+  document.getElementById("PBfname").innerHTML = data.fName;
+  document.getElementById("PBlname").innerHTML = data.lName;
+  document.getElementById("PBbd").innerHTML = data.birthday;
+  document.getElementById("PBsex").innerHTML = data.sex;
+  document.getElementById("PBcountry").innerHTML = data.country;
+  document.getElementById("PBemail").innerHTML = data.email;
+  document.getElementById("PBemail").href = "mailto:" + data.email;
+  document.getElementById("PBfb").innerHTML = data.facebookLink;
+  document.getElementById("PBfb").href = data.facebookLink;
+}
+</script>
+{{/if}}
+
+<div id="Comments" class="container-fluid">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title" align="center">Comments</h3>
+    </div>
+    <div class="panel-body">
+      <div class="fb-comments" data-href="http://127.0.0.1:3000/#Comments" data-numposts="5" data-width="100%"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,476 @@
+@prefix map: <#> .
+@prefix db: <> .
+@prefix food: <food/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:jdbcDSN "jdbc:mysql://127.0.0.1:3306/fooddb";
+	d2rq:username "root";
+	d2rq:password "<password>";
+	jdbc:autoReconnect "true";
+	jdbc:zeroDateTimeBehavior "convertToNull";
+	.
+
+# Table allergen
+map:allergen a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "allergen/@@allergen.idAllergen@@";
+	d2rq:class food:allergen;
+	d2rq:classDefinitionLabel "allergen";
+	.
+map:allergen__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:allergen;
+	d2rq:property rdfs:label;
+	d2rq:pattern "allergen #@@allergen.idAllergen@@";
+	.
+map:allergen_idAllergen a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:allergen;
+	d2rq:property food:allergen_idAllergen;
+	d2rq:propertyDefinitionLabel "allergen idAllergen";
+	d2rq:column "allergen.idAllergen";
+	d2rq:datatype xsd:integer;
+	.
+map:allergen_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:allergen;
+	d2rq:property food:allergen_name;
+	d2rq:propertyDefinitionLabel "allergen name";
+	d2rq:column "allergen.name";
+	.
+map:allergenisofingredient a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:allergen;
+	d2rq:property food:allergenisofingredient;
+	d2rq:propertyDefinitionLabel "allergen is found in ingredients";
+	d2rq:refersToClassMap map:ingredientcontainsallergen;
+	d2rq:join "allergen.idAllergen => ingredientcontainsallergen.AllergenID";
+	.
+map:allergenisofuser a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:allergen;
+	d2rq:property food:allergenisofuser;
+	d2rq:propertyDefinitionLabel "a user can be allergic to certain allergens";
+	d2rq:refersToClassMap map:userallergicto;
+	d2rq:join "allergen.idAllergen => userallergicto.AllergenID";
+	.
+
+# Table diet
+map:diet a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "diet/@@diet.idDiet@@";
+	d2rq:class food:diet;
+	d2rq:classDefinitionLabel "diet";
+	.
+map:diet__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property rdfs:label;
+	d2rq:pattern "diet #@@diet.idDiet@@";
+	.
+map:diet_idDiet a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property food:diet_idDiet;
+	d2rq:propertyDefinitionLabel "diet idDiet";
+	d2rq:column "diet.idDiet";
+	d2rq:datatype xsd:integer;
+	.
+map:diet_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property food:diet_name;
+	d2rq:propertyDefinitionLabel "diet name";
+	d2rq:column "diet.name";
+	.
+map:diet_description a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property food:diet_description;
+	d2rq:propertyDefinitionLabel "diet description";
+	d2rq:column "diet.description";
+	.
+map:diet_type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property food:diet_type;
+	d2rq:propertyDefinitionLabel "diet type";
+	d2rq:column "diet.type";
+	.
+map:dietconsistsofmeal a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property food:dietconsistsofmeal;
+	d2rq:propertyDefinitionLabel "diets consist of certain meals";
+	d2rq:refersToClassMap map:dietconsistsofmeals;
+	d2rq:join "diet.idDiet => dietconsistsofmeals.DietID";
+	.
+map:dietisfollowedbyuser a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property food:dietisfollowedbyuser;
+	d2rq:propertyDefinitionLabel "a diet can be followed by users";
+	d2rq:refersToClassMap map:userfollowsdiet;
+	d2rq:join "diet.idDiet => userfollowsdiet.DietID";
+	.
+map:dietmadebyuser a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:diet;
+	d2rq:property food:dietmadebyuser;
+	d2rq:propertyDefinitionLabel "a diet is made by a user";
+	d2rq:refersToClassMap map:user;
+	d2rq:join "diet.madeByUserID => user.idUser";
+	.
+
+# Table dietconsistsofmeals
+map:dietconsistsofmeals a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "dietconsistsofmeals/@@dietconsistsofmeals.idDietConsistsOfMeals@@";
+	d2rq:class food:dietconsistsofmeals;
+	d2rq:classDefinitionLabel "dietconsistsofmeals";
+	.
+map:dietconsistsofmeals__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:dietconsistsofmeals;
+	d2rq:property rdfs:label;
+	d2rq:pattern "dietconsistsofmeals #@@dietconsistsofmeals.idDietConsistsOfMeals@@";
+	.
+map:dietconsistsofmeals_idDietConsistsOfMeals a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:dietconsistsofmeals;
+	d2rq:property food:dietconsistsofmeals_idDietConsistsOfMeals;
+	d2rq:propertyDefinitionLabel "dietconsistsofmeals idDietConsistsOfMeals";
+	d2rq:column "dietconsistsofmeals.idDietConsistsOfMeals";
+	d2rq:datatype xsd:integer;
+	.
+
+# Table ingredient
+map:ingredient a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "ingredient/@@ingredient.idIngredient@@";
+	d2rq:class food:ingredient;
+	d2rq:classDefinitionLabel "ingredient";
+	.
+map:ingredient__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredient;
+	d2rq:property rdfs:label;
+	d2rq:pattern "ingredient #@@ingredient.idIngredient@@";
+	.
+map:ingredient_idIngredient a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredient;
+	d2rq:property food:ingredient_idIngredient;
+	d2rq:propertyDefinitionLabel "ingredient idIngredient";
+	d2rq:column "ingredient.idIngredient";
+	d2rq:datatype xsd:integer;
+	.
+map:ingredient_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredient;
+	d2rq:property food:ingredient_name;
+	d2rq:propertyDefinitionLabel "ingredient name";
+	d2rq:column "ingredient.name";
+	.
+map:ingredientcontainsallergens a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredient;
+	d2rq:property food:ingredientcontainsallergens;
+	d2rq:propertyDefinitionLabel "ingredient contains allergen";
+	d2rq:refersToClassMap map:ingredientcontainsallergen;
+	d2rq:join "ingredient.idIngredient => ingredientcontainsallergen.IngredientID";
+	.
+map:ingredientisofrecipe a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredient;
+	d2rq:property food:ingredientisofrecipe;
+	d2rq:propertyDefinitionLabel "ingredients are used in a recipe";
+	d2rq:refersToClassMap map:recipecontainsingredient;
+	d2rq:join "ingredient.idIngredient => recipecontainsingredient.IngredientID";
+	.
+map:ingredientisofuser a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredient;
+	d2rq:property food:ingredientisofuser;
+	d2rq:propertyDefinitionLabel "a user can have ingredients";
+	d2rq:refersToClassMap map:userhasingredients;
+	d2rq:join "ingredient.idIngredient => userhasingredients.ingredientID";
+	.
+
+# Table ingredientcontainsallergen
+map:ingredientcontainsallergen a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "ingredientcontainsallergen/@@ingredientcontainsallergen.idIngredientContainsAllergen@@";
+	d2rq:class food:ingredientcontainsallergen;
+	d2rq:classDefinitionLabel "ingredientcontainsallergen";
+	.
+map:ingredientcontainsallergen__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredientcontainsallergen;
+	d2rq:property rdfs:label;
+	d2rq:pattern "ingredientcontainsallergen #@@ingredientcontainsallergen.idIngredientContainsAllergen@@";
+	.
+map:ingredientcontainsallergen_idIngredientContainsAllergen a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ingredientcontainsallergen;
+	d2rq:property food:ingredientcontainsallergen_idIngredientContainsAllergen;
+	d2rq:propertyDefinitionLabel "ingredientcontainsallergen idIngredientContainsAllergen";
+	d2rq:column "ingredientcontainsallergen.idIngredientContainsAllergen";
+	d2rq:datatype xsd:integer;
+	.
+
+# Table meal
+map:meal a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "meal/@@meal.idMeal@@";
+	d2rq:class food:meal;
+	d2rq:classDefinitionLabel "meal";
+	.
+map:meal__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:meal;
+	d2rq:property rdfs:label;
+	d2rq:pattern "meal #@@meal.idMeal@@";
+	.
+map:meal_idMeal a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:meal;
+	d2rq:property food:meal_idMeal;
+	d2rq:propertyDefinitionLabel "meal idMeal";
+	d2rq:column "meal.idMeal";
+	d2rq:datatype xsd:integer;
+	.
+map:meal_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:meal;
+	d2rq:property food:meal_name;
+	d2rq:propertyDefinitionLabel "meal name";
+	d2rq:column "meal.name";
+	.
+map:mealisofdiet a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:meal;
+	d2rq:property food:mealisofdiet;
+	d2rq:propertyDefinitionLabel "meal belongs to certain diets";
+	d2rq:refersToClassMap map:dietconsistsofmeals;
+	d2rq:join "meal.idMeal => dietconsistsofmeals.MealID";
+	.
+map:mealconsistsofrecipe a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:meal;
+	d2rq:property food:mealconsistsofrecipe;
+	d2rq:propertyDefinitionLabel "meal consists of different recipes";
+	d2rq:refersToClassMap map:mealconsistsofrecipes;
+	d2rq:join "meal.idMeal => mealconsistsofrecipes.MealID";
+	.
+map:mealmadebyuser a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:meal;
+	d2rq:property food:mealmadebyuser;
+	d2rq:propertyDefinitionLabel "a meal is made by a user";
+	d2rq:refersToClassMap map:user;
+	d2rq:join "meal.madeByUserID => user.idUser";
+	.
+
+# Table mealconsistsofrecipes
+map:mealconsistsofrecipes a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "mealconsistsofrecipes/@@mealconsistsofrecipes.idMealConsistsOfRecipes@@";
+	d2rq:class food:mealconsistsofrecipes;
+	d2rq:classDefinitionLabel "mealconsistsofrecipes";
+	.
+map:mealconsistsofrecipes__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mealconsistsofrecipes;
+	d2rq:property rdfs:label;
+	d2rq:pattern "mealconsistsofrecipes #@@mealconsistsofrecipes.idMealConsistsOfRecipes@@";
+	.
+map:mealconsistsofrecipes_idMealConsistsOfRecipes a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mealconsistsofrecipes;
+	d2rq:property food:mealconsistsofrecipes_idMealConsistsOfRecipes;
+	d2rq:propertyDefinitionLabel "mealconsistsofrecipes idMealConsistsOfRecipes";
+	d2rq:column "mealconsistsofrecipes.idMealConsistsOfRecipes";
+	d2rq:datatype xsd:integer;
+	.
+
+# Table recipe
+map:recipe a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "recipe/@@recipe.idRecipe@@";
+	d2rq:class food:recipe;
+	d2rq:classDefinitionLabel "recipe";
+	.
+map:recipe__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property rdfs:label;
+	d2rq:pattern "recipe #@@recipe.idRecipe@@";
+	.
+map:recipe_idRecipe a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipe_idRecipe;
+	d2rq:propertyDefinitionLabel "recipe idRecipe";
+	d2rq:column "recipe.idRecipe";
+	d2rq:datatype xsd:integer;
+	.
+map:recipe_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipe_name;
+	d2rq:propertyDefinitionLabel "recipe name";
+	d2rq:column "recipe.name";
+	.
+map:recipe_rating a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipe_rating;
+	d2rq:propertyDefinitionLabel "recipe rating";
+	d2rq:column "recipe.rating";
+	d2rq:datatype xsd:integer;
+	.
+map:recipe_guide a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipe_guide;
+	d2rq:propertyDefinitionLabel "recipe guide";
+	d2rq:column "recipe.guide";
+	.
+map:recipe_recipeCategory a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipe_recipeCategory;
+	d2rq:propertyDefinitionLabel "recipe recipeCategory";
+	d2rq:column "recipe.recipeCategory";
+	.
+map:recipecontainsingredients a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipecontainsingredients;
+	d2rq:propertyDefinitionLabel "recipe contains ingredients";
+	d2rq:refersToClassMap map:recipecontainsingredient;
+	d2rq:join "recipe.idRecipe => recipecontainsingredient.RecipeID";
+	.
+map:recipeisofmeal a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipeisofmeal;
+	d2rq:propertyDefinitionLabel "recipe belongs to certain meals";
+	d2rq:refersToClassMap map:mealconsistsofrecipes;
+	d2rq:join "recipe.idRecipe => mealconsistsofrecipes.RecipeID";
+	.
+map:recipemadebyuser a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipe;
+	d2rq:property food:recipemadebyuser;
+	d2rq:propertyDefinitionLabel "a recipe is made by a user";
+	d2rq:refersToClassMap map:user;
+	d2rq:join "recipe.madeByUserID => user.idUser";
+	.
+
+# Table recipecontainsingredient
+map:recipecontainsingredient a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "recipecontainsingredient/@@recipecontainsingredient.idRecipeContainsIngredient@@";
+	d2rq:class food:recipecontainsingredient;
+	d2rq:classDefinitionLabel "recipecontainsingredient";
+	.
+map:recipecontainsingredient__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipecontainsingredient;
+	d2rq:property rdfs:label;
+	d2rq:pattern "recipecontainsingredient #@@recipecontainsingredient.idRecipeContainsIngredient@@";
+	.
+map:recipecontainsingredient_idRecipeContainsIngredient a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipecontainsingredient;
+	d2rq:property food:recipecontainsingredient_idRecipeContainsIngredient;
+	d2rq:propertyDefinitionLabel "recipecontainsingredient idRecipeContainsIngredient";
+	d2rq:column "recipecontainsingredient.idRecipeContainsIngredient";
+	d2rq:datatype xsd:integer;
+	.
+
+# Table user
+map:user a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "user/@@user.idUser@@";
+	d2rq:class food:user;
+	d2rq:classDefinitionLabel "user";
+	.
+map:user__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property rdfs:label;
+	d2rq:pattern "user #@@user.idUser@@";
+	.
+map:user_idUser a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property food:user_idUser;
+	d2rq:propertyDefinitionLabel "user idUser";
+	d2rq:column "user.idUser";
+	d2rq:datatype xsd:integer;
+	.
+map:user_email a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property food:user_email;
+	d2rq:propertyDefinitionLabel "user email";
+	d2rq:column "user.email";
+	.
+map:user_password a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property food:user_password;
+	d2rq:propertyDefinitionLabel "user password";
+	d2rq:column "user.password";
+	.
+map:user_professional a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property food:user_professional;
+	d2rq:propertyDefinitionLabel "user professional";
+	d2rq:column "user.professional";
+	d2rq:datatype xsd:boolean;
+	.
+map:userisallergicto a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property food:userisallergicto;
+	d2rq:propertyDefinitionLabel "a user can be allergic to certain allergens";
+	d2rq:refersToClassMap map:userallergicto;
+	d2rq:join "user.idUser => userallergicto.UserID";
+	.
+map:userfollowsdiets a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property food:userfollowsdiets;
+	d2rq:propertyDefinitionLabel "a user can follow certain diets";
+	d2rq:refersToClassMap map:userfollowsdiet;
+	d2rq:join "user.idUser => userfollowsdiet.UserID";
+	.
+map:userhasingredient a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:user;
+	d2rq:property food:userhasingredient;
+	d2rq:propertyDefinitionLabel "a user can have ingredients";
+	d2rq:refersToClassMap map:userhasingredients;
+	d2rq:join "user.idUser => userhasingredients.UserID";
+	.
+
+# Table userallergicto
+map:userallergicto a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "userallergicto/@@userallergicto.idUserAllergicTo@@";
+	d2rq:class food:userallergicto;
+	d2rq:classDefinitionLabel "userallergicto";
+	.
+map:userallergicto__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:userallergicto;
+	d2rq:property rdfs:label;
+	d2rq:pattern "userallergicto #@@userallergicto.idUserAllergicTo@@";
+	.
+map:userallergicto_idUserAllergicTo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:userallergicto;
+	d2rq:property food:userallergicto_idUserAllergicTo;
+	d2rq:propertyDefinitionLabel "userallergicto idUserAllergicTo";
+	d2rq:column "userallergicto.idUserAllergicTo";
+	d2rq:datatype xsd:integer;
+	.
+
+# Table userfollowsdiet
+map:userfollowsdiet a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "userfollowsdiet/@@userfollowsdiet.idUserFollowsDiet@@";
+	d2rq:class food:userfollowsdiet;
+	d2rq:classDefinitionLabel "userfollowsdiet";
+	.
+map:userfollowsdiet__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:userfollowsdiet;
+	d2rq:property rdfs:label;
+	d2rq:pattern "userfollowsdiet #@@userfollowsdiet.idUserFollowsDiet@@";
+	.
+map:userfollowsdiet_idUserFollowsDiet a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:userfollowsdiet;
+	d2rq:property food:userfollowsdiet_idUserFollowsDiet;
+	d2rq:propertyDefinitionLabel "userfollowsdiet idUserFollowsDiet";
+	d2rq:column "userfollowsdiet.idUserFollowsDiet";
+	d2rq:datatype xsd:integer;
+	.
+
+# Table userhasingredients
+map:userhasingredients a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "userhasingredients/@@userhasingredients.idUserHasIngredients@@";
+	d2rq:class food:userhasingredients;
+	d2rq:classDefinitionLabel "userhasingredients";
+	.
+map:userhasingredients__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:userhasingredients;
+	d2rq:property rdfs:label;
+	d2rq:pattern "userhasingredients #@@userhasingredients.idUserHasIngredients@@";
+	.
+map:userhasingredients_idUserHasIngredients a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:userhasingredients;
+	d2rq:property food:userhasingredients_idUserHasIngredients;
+	d2rq:propertyDefinitionLabel "userhasingredients idUserHasIngredients";
+	d2rq:column "userhasingredients.idUserHasIngredients";
+	d2rq:datatype xsd:integer;
+	.

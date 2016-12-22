@@ -123,15 +123,13 @@
       <form class="form-group" id="reg" action="/registered" method="post">
         <label class="label" style="color:gray;">Username</label><br>
         <input type="email" required name="email" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
-        <label id="emailError" style="color:red;"></label>
+        <label id="emailError" style="color:red;"></label><br>
         <label class="label" style="color:gray;">Password</label><br>
         <input pattern=".{4,10}" required type="password" name="password" class="input-xlarge"  oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}">
         <label id="passwordError" style="color:red;"></label><br>
         <label class="label" style="color:gray;">Password (again)</label><br>
-        <input pattern=".{4,10}" required type="password" name="password2" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"><br>
-        <label class="label" style="color:gray;">Professional</label><br>
-        <input type="checkbox" name="profesional" class="input-xlarge"/>
-        <label id="emailError" style="color:red;"></label>
+        <input pattern=".{4,10}" required type="password" name="password2" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"/><br><br>
+        <input type="checkbox" name="profesional" value="Professional" style="color:gray;">Professional<input/>
     </div>
     <div class="modal-footer">
       <input type="submit" class="btn btn-primary btn-sm" value="Register"/>
@@ -157,8 +155,8 @@
     <div class="modal-body">
       <form class="form-group" id="reg" action="/sign-in" method="post">
         <label id="signinError" style="color:red;"></label><br>
-        <label class="label" style="color:gray;">Username</label><br>
-        <input type="text" required name="username" class="input-xlarge" oninvalid="setCustomValidity('Username must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"><br>
+        <label class="label" style="color:gray;">E-mail</label><br>
+        <input type="email" required name="email" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
         <label class="label" style="color:gray;">Password</label><br>
         <input type="password"required name="password" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"><br>
     </div>
@@ -192,24 +190,7 @@
           <input pattern=".{4,10}" type="password" name="password2" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"><br>
           <label class="label" style="color:gray;">E-mail</label><br>
           <input type="email" name="email2" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
-          <label id="emailError2" style="color:red;"></label><br>
-          <label class="label" style="color:gray;">First name</label><br>
-          <input type="text" name="fname" class="input-xlarge"><br>
-          <label class="label" style="color:gray;">Last name</label><br>
-          <input type="text" name="lname" class="input-xlarge"><br>
-          <label class="label" style="color:gray;">Sex</label><br>
-          <label class="radio-inline">
-            <input type="radio" name="sex" id="maleUser" value="male"> Male
-          </label><br>
-          <label class="radio-inline">
-            <input type="radio" name="sex" id="femaleUser" value="female"> Female
-          </label><br>
-          <label class="label" min="1900-01-01" style="color:gray;">Date of birth</label><br>
-          <input type="date" name="bday"><br>
-          <label class="label" style="color:gray;">Country</label><br>
-          <input type="text" name="country" class="input-xlarge"><br>
-          <label class="label" style="color:gray;">Facebook URL</label><br>
-          <input type="url" name="fburl" class="input-xlarge">
+          <label id="emailError2" style="color:red;"></label>
       </div>
       <div class="modal-footer">
         <input type="submit" class="btn btn-primary btn-sm" value="Edit"/>

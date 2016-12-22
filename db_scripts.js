@@ -186,6 +186,7 @@ module.exports = {
 	  	console.log(fields);
 	  	callback(errorlist);
 	  });
+	}
 	//     db.get("SELECT * FROM users WHERE email = '" + email + "'", function(err, row) {
 	//       if (typeof row != "undefined") {
 	//         validEdit = false;

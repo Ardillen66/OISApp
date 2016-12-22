@@ -10,7 +10,8 @@
 	    bodyParser = require('body-parser'),
 	    cookieParser = require('cookie-parser'),
 	    session = require('express-session'),
-	    app = express();
+	    app = express(),
+	    db_scripts = require('./db_scripts');
 
 	//===============EXPRESS=================
 

@@ -122,15 +122,15 @@
     <div class="modal-body">
       <form class="form-group" id="reg" action="/registered" method="post">
         <label class="label" style="color:gray;">Username</label><br>
-        <input pattern=".{4,10}" required type="text" name="username" class="input-xlarge"  oninvalid="setCustomValidity('Username must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}">
-        <label id="usernameError" style="color:red;"></label><br>
+        <input type="email" required name="email" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
+        <label id="emailError" style="color:red;"></label>
         <label class="label" style="color:gray;">Password</label><br>
         <input pattern=".{4,10}" required type="password" name="password" class="input-xlarge"  oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}">
         <label id="passwordError" style="color:red;"></label><br>
         <label class="label" style="color:gray;">Password (again)</label><br>
         <input pattern=".{4,10}" required type="password" name="password2" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"><br>
-        <label class="label" style="color:gray;">E-mail</label><br>
-        <input type="email" required name="email" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
+        <label class="label" style="color:gray;">Professional</label><br>
+        <input type="checkbox" name="profesional" class="input-xlarge"/>
         <label id="emailError" style="color:red;"></label>
     </div>
     <div class="modal-footer">

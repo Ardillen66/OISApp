@@ -10,10 +10,10 @@ var connection = mysql.createConnection({
 
 module.exports = {
 	addRecipe: function addRecipe(user, recipe){
-		var query = "INSERT INTO recipe (name, rating, guide, recipeCategory, madeByUserID) VALUES (? , ? , ? , ?, ?)"; 
+		var query = "INSERT INTO recipe (name, guide, recipeCategory, madeByUserID) VALUES (? , ? , ?, ?)"; 
 		var recipeID;
 		connection.connect();
-		connection.query(query, [recipe.name, recipe.rating, recipe.guide, recipe.type, user.id], function(err, result){
+		connection.query(query, [recipe.name, recipe.guide, recipe.type, user.id], function(err, result){
 			 if (err) throw err;
 			 recipeID = result.insertId;
 			 console.log(result.insertId);
@@ -98,5 +98,112 @@ module.exports = {
 			});
 		};
 		connection.end();
-	}
+	},
+	
+	//inserts new user in the database
+	insertNewUser: function insertNewUser(email,password,professional) {
+		query = "INSERT INTO user (email,password,professional) VALUES (?,?,?)";
+	    connection.query(query, [email,password,professional], function(err, result){
+		 if (err) throw err;
+		 console.log(result.insertId);
+		});
+	},
+
+
+	//edits user information in the database
+	editAccount: function editAccount(uid,password,email,professional) {
+	  if (password != "") {
+	    query = "UPDATE user SET password=? WHERE id='" + uid + "'";
+	    connection.query(query, [password], function(err, result){
+		 if (err) throw err;
+		 console.log(result.changedRows);
+		});
+	  }
+	  if (email != "") {
+	    query = "UPDATE user SET email=? WHERE id='" + uid + "'";
+	    connection.query(query, [email], function(err, result){
+		 if (err) throw err;
+		 console.log(result.changedRows);
+		});
+	  }
+	  if (professional != "") {
+	    query = "UPDATE user SET professional=? WHERE id='" + uid + "'";
+	    connection.query(query, [professional], function(err, result){
+		 if (err) throw err;
+		 console.log(result.changedRows);
+		});
+	  }
+	},
+
+		//checks if a user is present in the database
+	authenticateUser: function authenticateUser(email,password,callback) {
+	  query = "SELECT id FROM user WHERE email = '" + email + "' AND password = '" + password + "' LIMIT 1";
+	  connection.query(query, function(err, results, fields){		//This function will be called if a match is found in the database.
+	    console.log(results);
+	    console.log(fields);
+	    callback(null);
+	  });
+	},
+
+		//checks with the database if a register is valid
+	registerCheck: function registerCheck(email, password1, password2, callback) {
+	  var validRegister = true;
+	  var errorlist = [];
+	  query = "SELECT * FROM user WHERE email = '" + email + "'";
+	  connection.query(query, function(err, results, fields) {
+	  	console.log(results);
+	  	console.log(fields);
+	  	callback(errorlist);
+	  });
+	    // db.get("SELECT * FROM users WHERE email = '" + email + "'", function(err, row) {
+	    //   if (typeof row != "undefined") {
+	    //     validRegister = false;
+	    //     var emailError = "E-mail is already used";
+	    //     errorlist.push(emailError);
+	    //   } else {
+	    //     errorlist.push(email);
+	    //   }
+	    //   if (password1 != password2) {
+	    //     validRegister = false;
+	    //     var passwordError = "Passwords do not match";
+	    //     errorlist.push(passwordError);
+	    //   }
+	    //   if (!validRegister) {
+	    //     callback(errorlist);
+	    //   } else {
+	    //     callback(validRegister);
+	    //   }
+	    // });
+	},
+
+	//checks with the database if an account edit is valid
+	editAccCheck: function editAccCheck(password1, password2, email, uid, callback) {
+	  var validEdit = true;
+	  var errorlist = [];
+	  query = "SELECT * FROM user WHERE email = '" + email + "'";
+	  connection.query(query, function(err, results, fields) {
+		console.log(results);
+	  	console.log(fields);
+	  	callback(errorlist);
+	  });
+	//     db.get("SELECT * FROM users WHERE email = '" + email + "'", function(err, row) {
+	//       if (typeof row != "undefined") {
+	//         validEdit = false;
+	//         var emailError = "E-mail is already used";
+	//         errorlist.push(emailError);
+	//       } else {
+	//         errorlist.push(email);
+	//       }
+	//       if (password1 != password2) {
+	//         validEdit = false;
+	//         var passwordError = "Passwords do not match";
+	//         errorlist.push(passwordError);
+	//       }
+	//       if (!validEdit) {
+	//         callback(errorlist);
+	//       } else {
+	//         callback(validEdit);
+	//       }
+	//     });
+	// }
 }

@@ -92,25 +92,19 @@
 	  var email=req.body.email,
 	      password=req.body.password,
 	      password2=req.body.password2,
-	      professional=req.body.professional;
-	  registerCheck(username, password, password2, email, function(reg) {
+	      professional;
+	  if (req.body.professional == "on") {professional=true} else {professional=false};
+	  db_scripts.registerCheck(email, password, password2, function(reg) {
 	    if (reg == true) {
-	      insertNewUser(email,password,professional);
-	      res.render('registered', {page:'/registered',username});
+	      db_scripts.insertNewUser(email,password,professional);
+	      res.render('registered', {page:'/registered',email});
 	    } else {
-	      var regError = {username:"", email:"", usernameError:"", emailError:"", passwordError:""};
-	      if (reg[0] != username) {
-	        regError.usernameError = reg[0];
-	      } else {
-	        regError.username=username;
-	      }
-	      if (reg[1] != email) {
-	        regError.emailError = reg[1];
+	      var regError = {email:"", emailError:"", passwordError:""};
+	      if (reg[0] != email) {
+	        regError.emailError = reg[0];
 	      } else {
 	        regError.email=email;
-	      }
-	      if (reg.length == 3) {
-	        regError.passwordError = reg[2];
+	        regError.passwordError = reg[1];
 	      }
 	      res.render('home', {page:'/registered',regError});
 	    }

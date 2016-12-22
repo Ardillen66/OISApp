@@ -100,12 +100,15 @@ module.exports = {
 		connection.end();
 	},
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////// USER DATABASE FUNCTIONS ////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	//inserts new user in the database
 	insertNewUser: function insertNewUser(email,password,professional) {
 		query = "INSERT INTO user (email,password,professional) VALUES (?,?,?)";
 	    connection.query(query, [email,password,professional], function(err, result){
 		 if (err) throw err;
-		 console.log(result.insertId);
 		});
 	},
 
@@ -135,7 +138,7 @@ module.exports = {
 	  }
 	},
 
-		//checks if a user is present in the database
+	//checks if a user is present in the database
 	authenticateUser: function authenticateUser(email,password,callback) {
 	  query = "SELECT id FROM user WHERE email = '" + email + "' AND password = '" + password + "' LIMIT 1";
 	  connection.query(query, function(err, results, fields){		//This function will be called if a match is found in the database.
@@ -151,29 +154,25 @@ module.exports = {
 	  var errorlist = [];
 	  query = "SELECT * FROM user WHERE email = '" + email + "'";
 	  connection.query(query, function(err, results, fields) {
-	  	console.log(results);
-	  	console.log(fields);
-	  	callback(errorlist);
+	  	if (results.length < 1) {
+	  		errorlist.push(email);
+	  		if (password1 != password2) {
+	        	validRegister = false;
+	        	var passwordError = "Passwords do not match";
+	        	errorlist.push(passwordError);
+	      	}
+	  	}
+	  	else {
+	  		validRegister = false;
+	        var emailError = "E-mail is already used";
+	        errorlist.push(emailError);
+	  	}
+	  	if (!validRegister) {
+	        callback(errorlist);
+	      } else {
+	        callback(validRegister);
+	      }
 	  });
-	    // db.get("SELECT * FROM users WHERE email = '" + email + "'", function(err, row) {
-	    //   if (typeof row != "undefined") {
-	    //     validRegister = false;
-	    //     var emailError = "E-mail is already used";
-	    //     errorlist.push(emailError);
-	    //   } else {
-	    //     errorlist.push(email);
-	    //   }
-	    //   if (password1 != password2) {
-	    //     validRegister = false;
-	    //     var passwordError = "Passwords do not match";
-	    //     errorlist.push(passwordError);
-	    //   }
-	    //   if (!validRegister) {
-	    //     callback(errorlist);
-	    //   } else {
-	    //     callback(validRegister);
-	    //   }
-	    // });
 	},
 
 	//checks with the database if an account edit is valid

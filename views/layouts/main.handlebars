@@ -121,7 +121,7 @@
     </div>
     <div class="modal-body">
       <form class="form-group" id="reg" action="/registered" method="post">
-        <label class="label" style="color:gray;">Username</label><br>
+        <label class="label" style="color:gray;">E-mail</label><br>
         <input type="email" required name="email" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
         <label id="emailError" style="color:red;"></label><br>
         <label class="label" style="color:gray;">Password</label><br>
@@ -129,7 +129,7 @@
         <label id="passwordError" style="color:red;"></label><br>
         <label class="label" style="color:gray;">Password (again)</label><br>
         <input pattern=".{4,10}" required type="password" name="password2" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"/><br><br>
-        <input type="checkbox" name="profesional" value="Professional" style="color:gray;">Professional<input/>
+        <input type="checkbox" name="professional" style="color:gray;"/><label class="label" style="color:gray;">Professional</label>
     </div>
     <div class="modal-footer">
       <input type="submit" class="btn btn-primary btn-sm" value="Register"/>
@@ -241,13 +241,7 @@
       $(window).load(function(){
         $('#registerModal').modal('show');
       });
-      var username = document.getElementsByName("username")[0];
       var email = document.getElementsByName("email")[0];
-      if ("{{regError.username}}" == "") {
-        document.getElementById("usernameError").innerHTML = "&nbsp{{regError.usernameError}}";
-      } else {
-        username.value = "{{regError.username}}";
-      }
       if ("{{regError.passwordError}}" != "") {
         document.getElementById("passwordError").innerHTML = "&nbsp{{regError.passwordError}}";
       }

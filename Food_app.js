@@ -47,8 +47,9 @@
 
 	//===============PASSPORT=================
 
-	passport.use('local', new LocalStrategy(function(username, password, done) {
-	  authenticateUser(username,password,function(user) {
+	passport.use('local', new LocalStrategy(function(email, password, done) {
+		console.log("test");
+	  db_scripts.authenticateUser(email,password,function(user) {
 	      if (user == null) return done(null, false);
 	      return done(null, user);
 	  });

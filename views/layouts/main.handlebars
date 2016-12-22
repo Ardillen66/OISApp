@@ -156,9 +156,9 @@
       <form class="form-group" id="reg" action="/sign-in" method="post">
         <label id="signinError" style="color:red;"></label><br>
         <label class="label" style="color:gray;">E-mail</label><br>
-        <input type="email" required name="email" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
+        <input type="email" required name="username" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/><br>
         <label class="label" style="color:gray;">Password</label><br>
-        <input type="password"required name="password" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"><br>
+        <input type="password"required name="password" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}">
     </div>
     <div class="modal-footer">
       <input type="submit" class="btn btn-primary btn-sm" value="Sign-in"/>

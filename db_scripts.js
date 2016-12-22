@@ -4,7 +4,7 @@ var sparqlClient = require('sparql-client');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '<password>',
+    password : '<PASSWORD>',
     database : 'fooddb'
 });
 
@@ -140,11 +140,14 @@ module.exports = {
 
 	//checks if a user is present in the database
 	authenticateUser: function authenticateUser(email,password,callback) {
-	  query = "SELECT id FROM user WHERE email = '" + email + "' AND password = '" + password + "' LIMIT 1";
-	  connection.query(query, function(err, results, fields){		//This function will be called if a match is found in the database.
-	    console.log(results);
-	    console.log(fields);
-	    callback(null);
+	  query = "SELECT idUser FROM user WHERE email = '" + email + "' AND password = '" + password + "'";
+	  connection.query(query, function(err, results, fields){
+	    if (results.length < 1) {
+	    	callback(null);
+	    }
+	    else {
+			callback(results);
+	    }
 	  });
 	},
 

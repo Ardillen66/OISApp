@@ -48,7 +48,6 @@
 	//===============PASSPORT=================
 
 	passport.use('local', new LocalStrategy(function(email, password, done) {
-		console.log("test");
 	  db_scripts.authenticateUser(email,password,function(user) {
 	      if (user == null) return done(null, false);
 	      return done(null, user);
@@ -56,7 +55,8 @@
 	}));
 
 	passport.serializeUser(function(user, done) {
-	  done(null, user);
+	  var userObject = {id: user[0].idUser,  username: user[0].email};
+	  done(null, userObject);
 	});
 
 	passport.deserializeUser(function(obj, done) {
@@ -82,8 +82,9 @@
 	    if (!user) {
 	      return res.render('home', {page:'/sign-in', signinError: "Invalid username and/or password, please try again"});
 	    };
+	    
 	    req.logIn(user, function(err) {
-	     return res.redirect('/');
+	      return res.redirect('/');
 	    });
 	  })(req, res);
 	});
@@ -117,34 +118,25 @@
 	  var password=req.body.password,
 	      password2=req.body.password2,
 	      email=req.body.email2,
-	      fname=req.body.fname,
-	      lname=req.body.lname,
-	      sex=req.body.sex,
-	      bday=req.body.bday,
-	      country=req.body.country,
-	      fbUrl=req.body.fburl,
 	      uid=req.user.id;
-	  editAccCheck(password, password2, email, fname, lname, sex, bday, country, fbUrl, uid, function(reg) {
+	  db_scripts.editAccCheck(password, password2, email, uid, function(reg) {
 	    if (reg == true) {
-	      editAccount(uid,password,email, fname, lname, sex, bday, country, fbUrl);
-	      res.render('home', {user: req.user});
+	      db_scripts.editAccount(uid,password,email);
+	      if (email == "") {
+	      	res.render('home', {user: req.user});
+	      }
+	      else {
+	      	var userObject = {id: req.user.id,  username: email};
+	      	res.render('home', {user: userObject});
+	      }
 	    } else {
-	      var editError = {email:"", fname:"", lname:"", sex:"", bday:"", country:"", fbUrl:"", emailError:"", passwordError:""};
+	      var editError = {email:"", emailError:"", passwordError:""};
 	      if (reg[0] != email) {
-	        editError.emailError = reg[1];
+	        editError.emailError = reg[0];
 	      } else {
 	        editError.email=email;
+	        editError.passwordError = reg[1];
 	      }
-	      if (reg.length == 2) {
-	        editError.passwordError = reg[2];
-	      }
-	        editError.fname=fname;
-	        editError.lname=lname;
-	        editError.sex=sex;
-	        editError.bday=bday;
-	        editError.country=country;
-	        editError.fbUrl=fbUrl;
-		console.log(editError);
 	      res.render('home', {page:'/editAccount', editError, user: req.user});
 	    }
 	  });
@@ -152,11 +144,9 @@
 
 	//loads user profile information from database
 	app.get('/getProfileInfo', function(req,res){
-	  db.get("SELECT username, email, fName, lName, birthday, facebookLink, country, sex FROM users WHERE id = '"+ req.query.uid + "'",
-	    function(err, data) {
-	      res.send(data);
-	    }
-	  );
+	  var data = db_scripts.getProfileInfo(req.query.uid, function(data) {
+	  	 res.send(data);
+	  	});
 	})
 
 	//gets username from user ID in database

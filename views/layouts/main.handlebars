@@ -183,14 +183,14 @@
       </div>
       <div class="modal-body">
         <form class="form-group" id="editAcc" action="/editAccount" method="post">
+          <label class="label" style="color:gray;">E-mail</label><br>
+          <input type="email" name="email2" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
+          <label id="emailError2" style="color:red;"></label><br>
           <label class="label" style="color:gray;">Password</label><br>
           <input pattern=".{4,10}" type="password" name="password" class="input-xlarge"  oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}">
           <label id="passwordError2" style="color:red;"></label><br>
           <label class="label" style="color:gray;">Password (again)</label><br>
-          <input pattern=".{4,10}" type="password" name="password2" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}"><br>
-          <label class="label" style="color:gray;">E-mail</label><br>
-          <input type="email" name="email2" class="input-xlarge" oninvalid="setCustomValidity('A valid e-mail address must be given!')" onchange="try{setCustomValidity('')}catch(e){}"/>
-          <label id="emailError2" style="color:red;"></label>
+          <input pattern=".{4,10}" type="password" name="password2" class="input-xlarge" oninvalid="setCustomValidity('Password must be between 4 and 10 characters long!')" onchange="try{setCustomValidity('')}catch(e){}">
       </div>
       <div class="modal-footer">
         <input type="submit" class="btn btn-primary btn-sm" value="Edit"/>

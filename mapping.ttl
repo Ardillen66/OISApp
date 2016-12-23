@@ -354,6 +354,13 @@ map:recipecontainsingredient_idRecipeContainsIngredient a d2rq:PropertyBridge;
 	d2rq:column "recipecontainsingredient.idRecipeContainsIngredient";
 	d2rq:datatype xsd:integer;
 	.
+map:recipecontainsingredient_amount a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:recipecontainsingredient;
+	d2rq:property food:recipecontainsingredient_amount;
+	d2rq:propertyDefinitionLabel "a recipe has an amount of a certain ingredient";
+	d2rq:column "recipecontainsingredient.Amount";
+	d2rq:datatype xsd:string;
+	.
 
 # Table user
 map:user a d2rq:ClassMap;

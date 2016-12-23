@@ -4,7 +4,7 @@ var sparqlClient = require('sparql-client');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '<PASSWORD>',
+    password : '<password>',
     database : 'fooddb'
 });
 

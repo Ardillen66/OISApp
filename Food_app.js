@@ -2,16 +2,12 @@
 	    exphbs  = require('express3-handlebars'),
 	    passport = require('passport'),
 	    LocalStrategy = require('passport-local'),
-	    fs = require("fs"),
-	    file = "CSdatabase.db",
-	    exists = fs.existsSync(file),
-	    sqlite3 = require("sqlite3").verbose(),
-	    db = new sqlite3.Database(file),
 	    bodyParser = require('body-parser'),
 	    cookieParser = require('cookie-parser'),
 	    session = require('express-session'),
 	    app = express(),
-	    db_scripts = require('./db_scripts');
+	    db_scripts = require('./db_scripts'),
+	    sparql_scripts = require('./sparql_scripts');;
 
 	//===============EXPRESS=================
 

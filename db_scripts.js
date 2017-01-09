@@ -1,5 +1,4 @@
-var sparqlClient = require('sparql-client');
-	mysql = require('mysql');
+var mysql = require('mysql');
 
 var connection = mysql.createConnection({
     host     : 'localhost',

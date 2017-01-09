@@ -23,25 +23,25 @@ module.exports = {
           							  "?recipe <http://localhost:2020/resource/food/recipecontainsingredients> ?ingredientOfRecipe." +
           							  "FILTER (?nameAllergen='"+allergen+"')}";
 
-        client.query(queryAllRecipes).execute(function(error, results) {
-  			client.query(queryRecipesContainingAllergens).execute(function(error2, results2) {
-        	for (var i = 0; i < results.results.bindings.length; i++) {
-        		var id = results.results.bindings[i].id.value,
-        		    name = results.results.bindings[i].recipeName.value,
-        		    category = results.results.bindings[i].recipeCategory.value,
-        		    email = results.results.bindings[i].userEmail.value,
-        		    validRecipe = true;
-        		for (var x = 0; x < results2.results.bindings.length; x++) {
-        			var id2 = results.results.bindings[x].id.value;
-        			if (id == id2) {validRecipe = false};
-        		}
-        		if (validRecipe == true) {listOfValidRecipes.push([id,name,category,email])};
-        		validRecipe = true;
+    client.query(queryAllRecipes).execute(function(error, results) {
+  	  client.query(queryRecipesContainingAllergens).execute(function(error2, results2) {
+        for (var i = 0; i < results.results.bindings.length; i++) {
+        	var id = results.results.bindings[i].id.value,
+        	    name = results.results.bindings[i].recipeName.value,
+        	    category = results.results.bindings[i].recipeCategory.value,
+        	    email = results.results.bindings[i].userEmail.value,
+        	    validRecipe = true;
+        	for (var x = 0; x < results2.results.bindings.length; x++) {
+        		var id2 = results.results.bindings[x].id.value;
+        		if (id == id2) {validRecipe = false};
         	}
+        	if (validRecipe == true) {listOfValidRecipes.push([id,name,category,email])};
+        	validRecipe = true;
+        }
 			});
 		});
 		setTimeout(function() {
-			console.log(listOfValidRecipes);
+			return listOfValidRecipes;
 		}, 1000);
 	}
 }
